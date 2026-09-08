@@ -1,0 +1,24 @@
+# Data files (Download instructions included in README)
+data/
+cleaned_data/
+*.csv
+!docs/*.csv
+
+# Python / Jupyter
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+.venv/
+venv/
+ENV/
+env/
+
+# OS / IDE generated files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Agent / AI config
+.agents/

@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retail Business Intelligence | E-Commerce Analytics Pipeline</title>
+  <meta name="description" content="End-to-end business intelligence pipeline analyzing 99,441 Olist e-commerce orders using Python, PostgreSQL, and Power BI." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ─── NAV ─────────────────────────────────────────────────── -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <div class="nav-brand">
+        <span class="brand-icon">📊</span>
+        <span class="brand-text">Retail BI</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#overview"  class="nav-link">Overview</a></li>
+        <li><a href="#kpis"      class="nav-link">KPIs</a></li>
+        <li><a href="#insights"  class="nav-link">Insights</a></li>
+        <li><a href="#sql"       class="nav-link">SQL</a></li>
+        <li><a href="#dax"       class="nav-link">DAX</a></li>
+        <li><a href="#schema"    class="nav-link">Schema</a></li>
+        <li><a href="#stack"     class="nav-link">Stack</a></li>
+      </ul>
+      <a href="https://github.com" class="btn-github" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </nav>
+
+  <!-- ─── HERO ─────────────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-bg-glow glow-1"></div>
+    <div class="hero-bg-glow glow-2"></div>
+    <div class="hero-bg-glow glow-3"></div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="pulse-dot"></span>
+        End-to-End BI Pipeline · Olist Dataset · 2016 – 2018
+      </div>
+      <h1 class="hero-title">
+        Retail Business<br/>
+        <span class="gradient-text">Intelligence</span>
+      </h1>
+      <p class="hero-sub">
+        An advanced analytics pipeline analyzing <strong>99,441 e-commerce orders</strong> from Brazil's largest marketplace — built with <span class="tech-pill">Python</span> <span class="tech-pill">PostgreSQL</span> <span class="tech-pill">Power&nbsp;BI</span>
+      </p>
+      <div class="hero-cta-group">
+        <a href="#insights" class="btn-primary" id="hero-explore-btn">Explore Insights ↓</a>
+        <a href="#sql"      class="btn-outline"  id="hero-sql-btn">View SQL Queries</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="floating-card card-1">
+        <div class="fc-label">Gross Revenue</div>
+        <div class="fc-value">$13.59M</div>
+        <div class="fc-trend up">↑ 136%  YoY</div>
+      </div>
+      <div class="floating-card card-2">
+        <div class="fc-label">Avg Review Score</div>
+        <div class="fc-value">4.09 ⭐</div>
+        <div class="fc-trend neutral">99K+ Reviews</div>
+      </div>
+      <div class="floating-card card-3">
+        <div class="fc-label">Fulfillment Rate</div>
+        <div class="fc-value">97.0%</div>
+        <div class="fc-trend up">↑ On-Time</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── OVERVIEW ─────────────────────────────────────────────── -->
+  <section id="overview" class="section">
+    <div class="container">
+      <div class="section-label">PROJECT OVERVIEW</div>
+      <h2 class="section-title">Business Context &amp; Objectives</h2>
+      <p class="section-desc">
+        E-commerce marketplaces face complex operational challenges across customer satisfaction, fulfillment logistics, and revenue growth. This project addresses four critical executive questions:
+      </p>
+      <div class="objectives-grid">
+        <div class="obj-card" id="obj-growth">
+          <div class="obj-icon">📈</div>
+          <h3>Growth Trends</h3>
+          <p>What is the trajectory of revenue growth, and how do seasonal events like Black Friday impact sales?</p>
+        </div>
+        <div class="obj-card" id="obj-logistics">
+          <div class="obj-icon">🚚</div>
+          <h3>Logistics Bottlenecks</h3>
+          <p>How do shipping delays correlate with low customer review scores (1-star ratings)?</p>
+        </div>
+        <div class="obj-card" id="obj-category">
+          <div class="obj-icon">🛍️</div>
+          <h3>Category Strategy</h3>
+          <p>Which product categories drive high gross revenue versus high unit volume?</p>
+        </div>
+        <div class="obj-card" id="obj-finance">
+          <div class="obj-icon">💳</div>
+          <h3>Financial Behavior</h3>
+          <p>How do customers utilize installment financing across different payment options?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── KPI CARDS ────────────────────────────────────────────── -->
+  <section id="kpis" class="section section-dark">
+    <div class="container">
+      <div class="section-label">EXECUTIVE SUMMARY</div>
+      <h2 class="section-title">Key Performance Indicators</h2>
+      <div class="kpi-grid">
+        <div class="kpi-card" id="kpi-revenue">
+          <div class="kpi-icon">💰</div>
+          <div class="kpi-number" data-target="13591643">$0</div>
+          <div class="kpi-label">Gross Revenue</div>
+          <div class="kpi-context">Total sales across delivered orders</div>
+        </div>
+        <div class="kpi-card" id="kpi-orders">
+          <div class="kpi-icon">📦</div>
+          <div class="kpi-number" data-target="99441">0</div>
+          <div class="kpi-label">Total Orders</div>
+          <div class="kpi-context">Placed transactions 2016–2018</div>
+        </div>
+        <div class="kpi-card" id="kpi-aov">
+          <div class="kpi-icon">🧾</div>
+          <div class="kpi-number" data-target="136.68" data-prefix="$">$0</div>
+          <div class="kpi-label">Avg Order Value</div>
+          <div class="kpi-context">Mean revenue per order</div>
+        </div>
+        <div class="kpi-card" id="kpi-fulfillment">
+          <div class="kpi-icon">✅</div>
+          <div class="kpi-number" data-target="97">0%</div>
+          <div class="kpi-label">Fulfillment Rate</div>
+          <div class="kpi-context">Delivered order completion rate</div>
+        </div>
+        <div class="kpi-card" id="kpi-late">
+          <div class="kpi-icon">⚠️</div>
+          <div class="kpi-number" data-target="6.8">0%</div>
+          <div class="kpi-label">Late Delivery Rate</div>
+          <div class="kpi-context">Orders past estimated date</div>
+        </div>
+        <div class="kpi-card" id="kpi-rating">
+          <div class="kpi-icon">⭐</div>
+          <div class="kpi-number" data-target="4.09">0</div>
+          <div class="kpi-label">Avg Review Score</div>
+          <div class="kpi-context">Customer satisfaction / 5.0</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── KEY INSIGHTS + CHARTS ────────────────────────────────── -->
+  <section id="insights" class="section">
+    <div class="container">
+      <div class="section-label">DATA INSIGHTS</div>
+      <h2 class="section-title">Key Findings &amp; Visualizations</h2>
+
+      <!-- Insight 1 -->
+      <div class="insight-block" id="insight-revenue">
+        <div class="insight-text">
+          <div class="insight-num">01</div>
+          <h3>Monthly Revenue Growth &amp; Seasonality</h3>
+          <p>Revenue expanded rapidly through 2017, rising from <strong>$120K/month</strong> in early 2017 to over <strong>$1.0M/month</strong> in 2018. November 2017 recorded a sharp revenue peak driven by Black Friday promotions.</p>
+          <ul class="insight-bullets">
+            <li>🗓️ 2016 → 2018: 136% YoY growth in revenue</li>
+            <li>🛍️ Black Friday spike: single-month record high</li>
+            <li>📊 Consistent upward trend across all 2017–2018 months</li>
+          </ul>
+        </div>
+        <div class="insight-chart">
+          <img src="images/monthly_revenue_trend.png" alt="Monthly Revenue Trend" loading="lazy" id="chart-revenue-trend" />
+        </div>
+      </div>
+
+      <!-- Insight 2 -->
+      <div class="insight-block reverse" id="insight-delivery">
+        <div class="insight-text">
+          <div class="insight-num">02</div>
+          <h3>Logistics Delay vs Customer Satisfaction</h3>
+          <p>Fulfillment speed is the <strong>#1 driver of customer sentiment</strong>. The early delivery margin varies dramatically by satisfaction level:</p>
+          <div class="stat-comparison">
+            <div class="stat-box bad">
+              <div class="stat-star">⭐ 1-Star</div>
+              <div class="stat-days">4.1 days early</div>
+              <div class="stat-note">Smallest buffer</div>
+            </div>
+            <div class="stat-arrow">→</div>
+            <div class="stat-box good">
+              <div class="stat-star">⭐⭐⭐⭐⭐ 5-Star</div>
+              <div class="stat-days">13.4 days early</div>
+              <div class="stat-note">3× the buffer</div>
+            </div>
+          </div>
+        </div>
+        <div class="insight-chart">
+          <img src="images/delivery_vs_review_score.png" alt="Delivery Delay vs Review Score" loading="lazy" id="chart-delivery" />
+        </div>
+      </div>
+
+      <!-- Insight 3 -->
+      <div class="insight-block" id="insight-categories">
+        <div class="insight-text">
+          <div class="insight-num">03</div>
+          <h3>Merchandising Performance</h3>
+          <p>Top product categories reveal a split between <strong>revenue leaders</strong> and <strong>volume leaders</strong>:</p>
+          <ul class="insight-bullets">
+            <li>💄 <strong>health_beauty</strong>: $1.25M gross revenue leader</li>
+            <li>⌚ <strong>watches_gifts</strong>: $1.20M, 2nd in revenue</li>
+            <li>🛏️ <strong>bed_bath_table</strong>: Highest unit volume sold</li>
+          </ul>
+        </div>
+        <div class="insight-chart">
+          <img src="images/top_product_categories.png" alt="Top Product Categories" loading="lazy" id="chart-categories" />
+        </div>
+      </div>
+
+      <!-- Insight 4 -->
+      <div class="insight-block reverse" id="insight-payments">
+        <div class="insight-text">
+          <div class="insight-num">04</div>
+          <h3>Payment Method Preferences</h3>
+          <p>Credit cards dominate Brazil's e-commerce payment landscape with significant installment usage:</p>
+          <div class="payment-bars">
+            <div class="pbar-row">
+              <span class="pbar-label">Credit Card</span>
+              <div class="pbar-track"><div class="pbar-fill" style="width:73.9%" id="pbar-cc"></div></div>
+              <span class="pbar-pct">73.9%</span>
+            </div>
+            <div class="pbar-row">
+              <span class="pbar-label">Boleto</span>
+              <div class="pbar-track"><div class="pbar-fill boleto" style="width:19%" id="pbar-boleto"></div></div>
+              <span class="pbar-pct">19.0%</span>
+            </div>
+            <div class="pbar-row">
+              <span class="pbar-label">Voucher</span>
+              <div class="pbar-track"><div class="pbar-fill voucher" style="width:5.6%" id="pbar-voucher"></div></div>
+              <span class="pbar-pct">5.6%</span>
+            </div>
+            <div class="pbar-row">
+              <span class="pbar-label">Debit Card</span>
+              <div class="pbar-track"><div class="pbar-fill debit" style="width:1.5%" id="pbar-debit"></div></div>
+              <span class="pbar-pct">1.5%</span>
+            </div>
+          </div>
+          <p class="insight-note">💡 Over 50% of credit card users opt for 3+ installment payments.</p>
+        </div>
+        <div class="insight-chart">
+          <img src="images/payment_methods_distribution.png" alt="Payment Methods Distribution" loading="lazy" id="chart-payments" />
+        </div>
+      </div>
+
+      <!-- Insight 5 -->
+      <div class="insight-block" id="insight-geo">
+        <div class="insight-text">
+          <div class="insight-num">05</div>
+          <h3>Geographic Order Distribution</h3>
+          <p>Order volume is heavily concentrated in southeastern Brazil, revealing a clear opportunity for geographic expansion:</p>
+          <div class="geo-table">
+            <div class="geo-row header">
+              <span>State</span><span>Orders</span><span>Share</span>
+            </div>
+            <div class="geo-row">
+              <span>🏙️ São Paulo (SP)</span>
+              <span>41,746</span>
+              <span class="share-pct">42%</span>
+            </div>
+            <div class="geo-row">
+              <span>🌊 Rio de Janeiro (RJ)</span>
+              <span>12,852</span>
+              <span class="share-pct">13%</span>
+            </div>
+            <div class="geo-row">
+              <span>⛏️ Minas Gerais (MG)</span>
+              <span>11,635</span>
+              <span class="share-pct">12%</span>
+            </div>
+          </div>
+          <p class="insight-note">Top 3 states account for <strong>67%</strong> of all orders.</p>
+        </div>
+        <div class="insight-chart">
+          <img src="images/top_states_orders.png" alt="Top States by Orders" loading="lazy" id="chart-geo" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SQL SECTION ──────────────────────────────────────────── -->
+  <section id="sql" class="section section-dark">
+    <div class="container">
+      <div class="section-label">SQL ANALYTICS</div>
+      <h2 class="section-title">25+ Advanced SQL Queries</h2>
+      <p class="section-desc">PostgreSQL queries ranging from core KPIs to advanced window functions, CTEs, and cohort analysis.</p>
+
+      <div class="sql-tabs">
+        <button class="sql-tab active" data-tab="window" id="sql-tab-window">Window Functions</button>
+        <button class="sql-tab" data-tab="cte" id="sql-tab-cte">CTEs</button>
+        <button class="sql-tab" data-tab="rfm" id="sql-tab-rfm">RFM Analysis</button>
+        <button class="sql-tab" data-tab="cohort" id="sql-tab-cohort">Cohort Analysis</button>
+      </div>
+
+      <div class="sql-panels">
+
+        <div class="sql-panel active" id="panel-window">
+          <div class="sql-meta">
+            <span class="sql-badge">Q23</span>
+            <span class="sql-title-text">Month-over-Month Revenue Growth (LAG)</span>
+          </div>
+          <pre class="code-block"><code><span class="sql-kw">WITH</span> monthly_rev <span class="sql-kw">AS</span> (
+    <span class="sql-kw">SELECT</span>
+        order_year, order_month, order_month_name,
+        <span class="sql-fn">ROUND</span>(<span class="sql-fn">SUM</span>(order_value), <span class="sql-num">2</span>) <span class="sql-kw">AS</span> monthly_revenue
+    <span class="sql-kw">FROM</span> orders
+    <span class="sql-kw">WHERE</span> order_status = <span class="sql-str">'delivered'</span>
+    <span class="sql-kw">GROUP BY</span> order_year, order_month, order_month_name
+)
+<span class="sql-kw">SELECT</span>
+    order_year, order_month, monthly_revenue,
+    <span class="sql-fn">LAG</span>(monthly_revenue) <span class="sql-kw">OVER</span> (<span class="sql-kw">ORDER BY</span> order_year, order_month) <span class="sql-kw">AS</span> prev_month,
+    <span class="sql-fn">ROUND</span>(
+        <span class="sql-num">100.0</span> * (monthly_revenue - <span class="sql-fn">LAG</span>(monthly_revenue) <span class="sql-kw">OVER</span> (<span class="sql-kw">ORDER BY</span> order_year, order_month))
+        / <span class="sql-fn">NULLIF</span>(<span class="sql-fn">LAG</span>(monthly_revenue) <span class="sql-kw">OVER</span> (<span class="sql-kw">ORDER BY</span> order_year, order_month), <span class="sql-num">0</span>), <span class="sql-num">2</span>
+    ) <span class="sql-kw">AS</span> mom_growth_pct
+<span class="sql-kw">FROM</span> monthly_rev
+<span class="sql-kw">ORDER BY</span> order_year, order_month;</code></pre>
+        </div>
+
+        <div class="sql-panel" id="panel-cte">
+          <div class="sql-meta">
+            <span class="sql-badge">Q25</span>
+            <span class="sql-title-text">Top Sellers Ranked Within Each State (RANK PARTITION BY)</span>
+          </div>
+          <pre class="code-block"><code><span class="sql-kw">WITH</span> seller_rev <span class="sql-kw">AS</span> (
+    <span class="sql-kw">SELECT</span>
+        s.seller_state, s.seller_id,
+        <span class="sql-fn">ROUND</span>(<span class="sql-fn">SUM</span>(oi.price), <span class="sql-num">2</span>) <span class="sql-kw">AS</span> total_revenue,
+        <span class="sql-fn">COUNT</span>(<span class="sql-kw">DISTINCT</span> oi.order_id) <span class="sql-kw">AS</span> total_orders
+    <span class="sql-kw">FROM</span> sellers s
+    <span class="sql-kw">JOIN</span> order_items oi <span class="sql-kw">ON</span> s.seller_id = oi.seller_id
+    <span class="sql-kw">GROUP BY</span> s.seller_state, s.seller_id
+)
+<span class="sql-kw">SELECT</span>
+    seller_state, seller_id, total_revenue, total_orders,
+    <span class="sql-fn">RANK</span>() <span class="sql-kw">OVER</span> (
+        <span class="sql-kw">PARTITION BY</span> seller_state
+        <span class="sql-kw">ORDER BY</span> total_revenue <span class="sql-kw">DESC</span>
+    ) <span class="sql-kw">AS</span> rank_in_state
+<span class="sql-kw">FROM</span> seller_rev
+<span class="sql-kw">ORDER BY</span> seller_state, rank_in_state;</code></pre>
+        </div>
+
+        <div class="sql-panel" id="panel-rfm">
+          <div class="sql-meta">
+            <span class="sql-badge">Q26</span>
+            <span class="sql-title-text">Customer RFM Segmentation Matrix (NTILE)</span>
+          </div>
+          <pre class="code-block"><code><span class="sql-kw">WITH</span> max_date <span class="sql-kw">AS</span> (
+    <span class="sql-kw">SELECT MAX</span>(order_purchase_timestamp) <span class="sql-kw">AS</span> max_timestamp <span class="sql-kw">FROM</span> orders
+),
+rfm <span class="sql-kw">AS</span> (
+    <span class="sql-kw">SELECT</span>
+        c.customer_unique_id,
+        <span class="sql-fn">DATE_PART</span>(<span class="sql-str">'day'</span>, (SELECT max_timestamp FROM max_date) - MAX(o.order_purchase_timestamp)) <span class="sql-kw">AS</span> recency,
+        <span class="sql-fn">COUNT</span>(<span class="sql-kw">DISTINCT</span> o.order_id)  <span class="sql-kw">AS</span> frequency,
+        <span class="sql-fn">ROUND</span>(<span class="sql-fn">SUM</span>(o.order_value), <span class="sql-num">2</span>) <span class="sql-kw">AS</span> monetary
+    <span class="sql-kw">FROM</span> customers c
+    <span class="sql-kw">JOIN</span> orders o <span class="sql-kw">ON</span> c.customer_id = o.customer_id
+    <span class="sql-kw">WHERE</span> o.order_status = <span class="sql-str">'delivered'</span>
+    <span class="sql-kw">GROUP BY</span> c.customer_unique_id
+)
+<span class="sql-kw">SELECT</span>
+    customer_unique_id, recency, frequency, monetary,
+    <span class="sql-fn">NTILE</span>(<span class="sql-num">4</span>) <span class="sql-kw">OVER</span> (<span class="sql-kw">ORDER BY</span> recency  <span class="sql-kw">DESC</span>) <span class="sql-kw">AS</span> r_score,
+    <span class="sql-fn">NTILE</span>(<span class="sql-num">4</span>) <span class="sql-kw">OVER</span> (<span class="sql-kw">ORDER BY</span> frequency <span class="sql-kw">ASC</span>)  <span class="sql-kw">AS</span> f_score,
+    <span class="sql-fn">NTILE</span>(<span class="sql-num">4</span>) <span class="sql-kw">OVER</span> (<span class="sql-kw">ORDER BY</span> monetary  <span class="sql-kw">ASC</span>)  <span class="sql-kw">AS</span> m_score
+<span class="sql-kw">FROM</span> rfm <span class="sql-kw">LIMIT</span> <span class="sql-num">100</span>;</code></pre>
+        </div>
+
+        <div class="sql-panel" id="panel-cohort">
+          <div class="sql-meta">
+            <span class="sql-badge">Q27</span>
+            <span class="sql-title-text">Customer Cohort Analysis (Monthly Acquisition &amp; Retention)</span>
+          </div>
+          <pre class="code-block"><code><span class="sql-kw">WITH</span> customer_cohorts <span class="sql-kw">AS</span> (
+    <span class="sql-kw">SELECT</span>
+        c.customer_unique_id,
+        <span class="sql-fn">MIN</span>(<span class="sql-fn">DATE_TRUNC</span>(<span class="sql-str">'month'</span>, o.order_purchase_timestamp)) <span class="sql-kw">AS</span> cohort_month
+    <span class="sql-kw">FROM</span> customers c
+    <span class="sql-kw">JOIN</span> orders o <span class="sql-kw">ON</span> c.customer_id = o.customer_id
+    <span class="sql-kw">GROUP BY</span> c.customer_unique_id
+),
+user_activities <span class="sql-kw">AS</span> (
+    <span class="sql-kw">SELECT</span>
+        c.customer_unique_id,
+        <span class="sql-fn">DATE_TRUNC</span>(<span class="sql-str">'month'</span>, o.order_purchase_timestamp) <span class="sql-kw">AS</span> activity_month
+    <span class="sql-kw">FROM</span> customers c
+    <span class="sql-kw">JOIN</span> orders o <span class="sql-kw">ON</span> c.customer_id = o.customer_id
+)
+<span class="sql-kw">SELECT</span>
+    cohort_month, activity_month,
+    <span class="sql-fn">COUNT</span>(<span class="sql-kw">DISTINCT</span> ua.customer_unique_id) <span class="sql-kw">AS</span> active_customers
+<span class="sql-kw">FROM</span> customer_cohorts cc
+<span class="sql-kw">JOIN</span> user_activities ua <span class="sql-kw">ON</span> cc.customer_unique_id = ua.customer_unique_id
+<span class="sql-kw">GROUP BY</span> cohort_month, activity_month
+<span class="sql-kw">ORDER BY</span> cohort_month, activity_month;</code></pre>
+        </div>
+
+      </div>
+
+      <div class="sql-summary-grid">
+        <div class="sql-sum-card" id="sql-sum-ddl">
+          <div class="sql-sum-num">8</div>
+          <div class="sql-sum-label">DDL Tables Created</div>
+        </div>
+        <div class="sql-sum-card" id="sql-sum-queries">
+          <div class="sql-sum-num">25+</div>
+          <div class="sql-sum-label">Analysis Queries</div>
+        </div>
+        <div class="sql-sum-card" id="sql-sum-window">
+          <div class="sql-sum-num">5</div>
+          <div class="sql-sum-label">Window Functions</div>
+        </div>
+        <div class="sql-sum-card" id="sql-sum-cte">
+          <div class="sql-sum-num">4</div>
+          <div class="sql-sum-label">CTE Queries</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── DAX SECTION ─────────────────────────────────────────── -->
+  <section id="dax" class="section">
+    <div class="container">
+      <div class="section-label">POWER BI</div>
+      <h2 class="section-title">DAX Measures &amp; Data Model</h2>
+      <p class="section-desc">17+ production-grade DAX expressions powering the executive dashboard, from time-intelligence to advanced segmentation.</p>
+
+      <div class="dax-categories">
+
+        <div class="dax-cat-card" id="dax-revenue">
+          <div class="dax-cat-header">
+            <span class="dax-cat-icon">💰</span>
+            <span class="dax-cat-name">Revenue Metrics</span>
+            <span class="dax-cat-count">4 measures</span>
+          </div>
+          <div class="dax-measures">
+            <div class="dax-measure">
+              <div class="dax-measure-name">Total Revenue</div>
+              <pre class="dax-code">Total Revenue = SUM( Orders[order_value] )</pre>
+            </div>
+            <div class="dax-measure">
+              <div class="dax-measure-name">Average Order Value</div>
+              <pre class="dax-code">Average Order Value =
+DIVIDE( [Total Revenue], [Total Orders], 0 )</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="dax-cat-card" id="dax-time">
+          <div class="dax-cat-header">
+            <span class="dax-cat-icon">📅</span>
+            <span class="dax-cat-name">Time Intelligence</span>
+            <span class="dax-cat-count">3 measures</span>
+          </div>
+          <div class="dax-measures">
+            <div class="dax-measure">
+              <div class="dax-measure-name">YoY Revenue Growth %</div>
+              <pre class="dax-code">YoY Revenue Growth Pct =
+VAR CurrentRevenue = [Total Revenue]
+VAR PreviousYearRevenue =
+    CALCULATE(
+        [Total Revenue],
+        SAMEPERIODLASTYEAR( Dim_Calendar[Date] )
+    )
+RETURN
+DIVIDE( CurrentRevenue - PreviousYearRevenue,
+        PreviousYearRevenue, 0 )</pre>
+            </div>
+            <div class="dax-measure">
+              <div class="dax-measure-name">YTD Cumulative Revenue</div>
+              <pre class="dax-code">Cumulative Revenue YTD =
+TOTALYTD( [Total Revenue], Dim_Calendar[Date] )</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="dax-cat-card" id="dax-logistics">
+          <div class="dax-cat-header">
+            <span class="dax-cat-icon">🚚</span>
+            <span class="dax-cat-name">Logistics &amp; Fulfillment</span>
+            <span class="dax-cat-count">5 measures</span>
+          </div>
+          <div class="dax-measures">
+            <div class="dax-measure">
+              <div class="dax-measure-name">Late Delivery %</div>
+              <pre class="dax-code">Late Delivery Pct =
+DIVIDE( [Late Orders Count], [Delivered Orders], 0 )</pre>
+            </div>
+            <div class="dax-measure">
+              <div class="dax-measure-name">Fulfillment Rate %</div>
+              <pre class="dax-code">Fulfillment Rate Pct =
+DIVIDE( [Delivered Orders], [Total Orders], 0 )</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="dax-cat-card" id="dax-customer">
+          <div class="dax-cat-header">
+            <span class="dax-cat-icon">⭐</span>
+            <span class="dax-cat-name">Customer Satisfaction</span>
+            <span class="dax-cat-count">3 measures</span>
+          </div>
+          <div class="dax-measures">
+            <div class="dax-measure">
+              <div class="dax-measure-name">1-Star Review %</div>
+              <pre class="dax-code">1 Star Review Pct =
+DIVIDE(
+    CALCULATE( COUNTROWS(Reviews),
+               Reviews[review_score] = 1 ),
+    COUNTROWS( Reviews ), 0
+)</pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="dax-cat-card full-width" id="dax-advanced">
+          <div class="dax-cat-header">
+            <span class="dax-cat-icon">🎯</span>
+            <span class="dax-cat-name">Advanced Analytics</span>
+            <span class="dax-cat-count">2 measures</span>
+          </div>
+          <div class="dax-measures two-col">
+            <div class="dax-measure">
+              <div class="dax-measure-name">Repeat Customer Rate</div>
+              <pre class="dax-code">Repeat Customer Rate =
+VAR TotalUniqueCustomers =
+    DISTINCTCOUNT( Orders[customer_id] )
+VAR RepeatCustomers =
+    COUNTROWS(
+        FILTER(
+            VALUES( Customers[customer_unique_id] ),
+            CALCULATE( COUNTROWS( Orders ) ) > 1
+        )
+    )
+RETURN
+DIVIDE( RepeatCustomers, TotalUniqueCustomers, 0 )</pre>
+            </div>
+            <div class="dax-measure">
+              <div class="dax-measure-name">Pareto Category Revenue Share</div>
+              <pre class="dax-code">Top Categories Rev Share =
+VAR TotalSalesAllCategories =
+    CALCULATE(
+        [Total Revenue],
+        ALL( Products[product_category_name_english] )
+    )
+RETURN
+DIVIDE( [Total Revenue], TotalSalesAllCategories, 0 )</pre>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SCHEMA SECTION ──────────────────────────────────────── -->
+  <section id="schema" class="section section-dark">
+    <div class="container">
+      <div class="section-label">DATA MODELING</div>
+      <h2 class="section-title">Database Schema &amp; Relationships</h2>
+      <p class="section-desc">A star schema built across 9 interconnected tables with full referential integrity enforced via foreign key constraints in PostgreSQL.</p>
+
+      <div class="schema-layout">
+        <div class="schema-diagram">
+          <div class="erd-container" id="erd-diagram">
+            <!-- Center: ORDERS (Fact) -->
+            <div class="erd-node fact central" id="erd-orders" style="left:50%;top:40%;transform:translate(-50%,-50%)">
+              <div class="erd-node-icon">📋</div>
+              <div class="erd-node-name">ORDERS</div>
+              <div class="erd-node-type">Fact Table</div>
+            </div>
+            <!-- Dimension nodes -->
+            <div class="erd-node dim" id="erd-customers" style="left:8%;top:15%">
+              <div class="erd-node-icon">👤</div>
+              <div class="erd-node-name">CUSTOMERS</div>
+              <div class="erd-node-type">Dimension</div>
+            </div>
+            <div class="erd-node dim" id="erd-order-items" style="left:72%;top:10%">
+              <div class="erd-node-icon">🛒</div>
+              <div class="erd-node-name">ORDER_ITEMS</div>
+              <div class="erd-node-type">Fact Table</div>
+            </div>
+            <div class="erd-node dim" id="erd-payments" style="left:82%;top:42%">
+              <div class="erd-node-icon">💳</div>
+              <div class="erd-node-name">PAYMENTS</div>
+              <div class="erd-node-type">Fact Table</div>
+            </div>
+            <div class="erd-node dim" id="erd-reviews" style="left:72%;top:72%">
+              <div class="erd-node-icon">⭐</div>
+              <div class="erd-node-name">REVIEWS</div>
+              <div class="erd-node-type">Fact Table</div>
+            </div>
+            <div class="erd-node dim" id="erd-products" style="left:8%;top:68%">
+              <div class="erd-node-icon">📦</div>
+              <div class="erd-node-name">PRODUCTS</div>
+              <div class="erd-node-type">Dimension</div>
+            </div>
+            <div class="erd-node dim" id="erd-sellers" style="left:2%;top:42%">
+              <div class="erd-node-icon">🏪</div>
+              <div class="erd-node-name">SELLERS</div>
+              <div class="erd-node-type">Dimension</div>
+            </div>
+            <div class="erd-node dim small" id="erd-geo" style="left:40%;top:78%">
+              <div class="erd-node-name">GEOLOCATION</div>
+            </div>
+            <div class="erd-node dim small" id="erd-cat" style="left:40%;top:3%">
+              <div class="erd-node-name">CATEGORY_NAMES</div>
+            </div>
+            <svg class="erd-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(139,92,246,0.6)"/>
+                </marker>
+              </defs>
+              <line x1="22" y1="23" x2="47" y2="38" stroke="rgba(139,92,246,0.4)" stroke-width="0.5" marker-end="url(#arrow)"/>
+              <line x1="72" y1="18" x2="55" y2="36" stroke="rgba(139,92,246,0.4)" stroke-width="0.5" marker-end="url(#arrow)"/>
+              <line x1="82" y1="48" x2="62" y2="44" stroke="rgba(139,92,246,0.4)" stroke-width="0.5" marker-end="url(#arrow)"/>
+              <line x1="72" y1="76" x2="55" y2="52" stroke="rgba(139,92,246,0.4)" stroke-width="0.5" marker-end="url(#arrow)"/>
+              <line x1="22" y1="74" x2="47" y2="52" stroke="rgba(139,92,246,0.4)" stroke-width="0.5" marker-end="url(#arrow)"/>
+              <line x1="12" y1="48" x2="47" y2="44" stroke="rgba(139,92,246,0.4)" stroke-width="0.5" marker-end="url(#arrow)"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="schema-tables">
+          <h3 class="schema-tables-title">Table Relationships</h3>
+          <div class="rel-table">
+            <div class="rel-row rel-header">
+              <span>Table</span><span>Role</span><span>Cardinality</span>
+            </div>
+            <div class="rel-row">
+              <span class="rel-name fact-badge">Orders</span>
+              <span>Central Fact</span>
+              <span class="rel-card">—</span>
+            </div>
+            <div class="rel-row">
+              <span class="rel-name fact-badge">Order_Items</span>
+              <span>Fact</span>
+              <span class="rel-card">*:1 → Orders</span>
+            </div>
+            <div class="rel-row">
+              <span class="rel-name fact-badge">Payments</span>
+              <span>Fact</span>
+              <span class="rel-card">*:1 → Orders</span>
+            </div>
+            <div class="rel-row">
+              <span class="rel-name fact-badge">Reviews</span>
+              <span>Fact</span>
+              <span class="rel-card">*:1 → Orders</span>
+            </div>
+            <div class="rel-row">
+              <span class="rel-name dim-badge">Customers</span>
+              <span>Dimension</span>
+              <span class="rel-card">1:* → Orders</span>
+            </div>
+            <div class="rel-row">
+              <span class="rel-name dim-badge">Products</span>
+              <span>Dimension</span>
+              <span class="rel-card">1:* → Items</span>
+            </div>
+            <div class="rel-row">
+              <span class="rel-name dim-badge">Sellers</span>
+              <span>Dimension</span>
+              <span class="rel-card">1:* → Items</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TECH STACK ───────────────────────────────────────────── -->
+  <section id="stack" class="section">
+    <div class="container">
+      <div class="section-label">TECHNOLOGY STACK</div>
+      <h2 class="section-title">Tools &amp; Technologies</h2>
+      <div class="stack-grid">
+        <div class="stack-card" id="stack-python">
+          <div class="stack-logo">🐍</div>
+          <div class="stack-name">Python 3.10+</div>
+          <div class="stack-libs">pandas · numpy · seaborn · matplotlib</div>
+          <div class="stack-use">Data cleaning, EDA, feature engineering</div>
+        </div>
+        <div class="stack-card" id="stack-postgres">
+          <div class="stack-logo">🐘</div>
+          <div class="stack-name">PostgreSQL</div>
+          <div class="stack-libs">CTEs · Window Functions · DDL/DML</div>
+          <div class="stack-use">Relational modeling & 25+ queries</div>
+        </div>
+        <div class="stack-card" id="stack-powerbi">
+          <div class="stack-logo">📊</div>
+          <div class="stack-name">Power BI Desktop</div>
+          <div class="stack-libs">DAX · Star Schema · Time Intelligence</div>
+          <div class="stack-use">Interactive executive dashboard</div>
+        </div>
+        <div class="stack-card" id="stack-jupyter">
+          <div class="stack-logo">📓</div>
+          <div class="stack-name">Jupyter Notebooks</div>
+          <div class="stack-libs">2 notebooks · Data quality + EDA</div>
+          <div class="stack-use">261K duplicate records cleaned</div>
+        </div>
+        <div class="stack-card" id="stack-dataset">
+          <div class="stack-logo">🇧🇷</div>
+          <div class="stack-name">Olist Dataset</div>
+          <div class="stack-libs">9 CSV files · 100K+ transactions</div>
+          <div class="stack-use">Brazilian e-commerce 2016–2018</div>
+        </div>
+        <div class="stack-card" id="stack-git">
+          <div class="stack-logo">🔧</div>
+          <div class="stack-name">Git &amp; GitHub</div>
+          <div class="stack-libs">Version control · Documentation</div>
+          <div class="stack-use">Full project history &amp; collab</div>
+        </div>
+      </div>
+
+      <!-- Pipeline flow -->
+      <div class="pipeline-flow">
+        <h3 class="pipeline-title">End-to-End Pipeline</h3>
+        <div class="pipeline-steps">
+          <div class="pipe-step" id="pipe-raw">
+            <div class="pipe-icon">📂</div>
+            <div class="pipe-name">Raw Data</div>
+            <div class="pipe-sub">9 CSV files</div>
+          </div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-step" id="pipe-clean">
+            <div class="pipe-icon">🧹</div>
+            <div class="pipe-name">Cleaning</div>
+            <div class="pipe-sub">Python / pandas</div>
+          </div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-step" id="pipe-sql">
+            <div class="pipe-icon">🗄️</div>
+            <div class="pipe-name">SQL Modeling</div>
+            <div class="pipe-sub">PostgreSQL</div>
+          </div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-step" id="pipe-eda">
+            <div class="pipe-icon">🔍</div>
+            <div class="pipe-name">EDA</div>
+            <div class="pipe-sub">Seaborn charts</div>
+          </div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-step" id="pipe-bi">
+            <div class="pipe-icon">📊</div>
+            <div class="pipe-name">Dashboard</div>
+            <div class="pipe-sub">Power BI</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── RESUME HIGHLIGHTS ────────────────────────────────────── -->
+  <section id="resume" class="section section-dark">
+    <div class="container">
+      <div class="section-label">RESUME SHOWCASE</div>
+      <h2 class="section-title">Portfolio Highlights</h2>
+      <div class="resume-grid">
+        <div class="resume-card" id="resume-pipeline">
+          <div class="resume-tag">End-to-End Pipeline</div>
+          <p>Designed a multi-layered ETL and analytics pipeline analyzing <strong>100K+ e-commerce transactions</strong> across 9 relational tables using Python, SQL, and Power BI.</p>
+        </div>
+        <div class="resume-card" id="resume-cleaning">
+          <div class="resume-tag">Data Engineering</div>
+          <p>Cleaned <strong>261K duplicate records</strong> and engineered key operational metrics including delivery_delay, AOV, and time-based segmentation variables.</p>
+        </div>
+        <div class="resume-card" id="resume-sql">
+          <div class="resume-tag">Advanced SQL</div>
+          <p>Authored <strong>25+ SQL scripts</strong> utilizing CTEs, window functions (LAG, RANK, NTILE), and cohort analysis to quantify the revenue impact of delivery delays.</p>
+        </div>
+        <div class="resume-card" id="resume-viz">
+          <div class="resume-tag">Data Visualization</div>
+          <p>Produced executive dashboards demonstrating that delivery delays past promised estimates correlate directly with <strong>1-star review ratings</strong>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ───────────────────────────────────────────────── -->
+  <footer id="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-icon">📊</span>
+        <span>Retail Business Intelligence</span>
+      </div>
+      <p class="footer-desc">Built on the Olist Brazilian E-Commerce Dataset · Python · PostgreSQL · Power BI</p>
+      <div class="footer-badges">
+        <span class="fbadge">Python 3.10+</span>
+        <span class="fbadge">PostgreSQL</span>
+        <span class="fbadge">Power BI</span>
+        <span class="fbadge">MIT License</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

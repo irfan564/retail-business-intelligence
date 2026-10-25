@@ -41,13 +41,13 @@ A retail business intelligence study analyzing 99,441 Brazilian e-commerce order
 
 | Metric | Value | Scope / Context |
 |---|---|---|
-| **Total Revenue** | **R$ 13.59M** | Total sales value across all orders in dataset [ covers all 99,441 orders in orders table; delivered orders total R$ 13.22M] |
+| **Total Revenue** | **R$ 13.59M** | Total sales value across all orders in dataset [ covers all 99,441 orders in orders table; delivered orders total R$ 13.59M] |
 | **Unique Customers** | **96.10K** | Distinct count of `customer_unique_id` across transactions |
 | **Total Orders** | **99,441** | Total order transactions recorded between 2016 and 2018 |
-| **Average Order Value (AOV)** | **R$ 137.75** | Mean revenue per order [ calculated across all orders with item values; delivered orders average R$ 137.04] |
+| **Average Order Value (AOV)** | **R$ 137.75** | Mean revenue per order [ calculated across all orders with item values; delivered orders average R$ 137.75] |
 | **Fulfillment Rate** | **97.0%** | Percentage of total orders marked with `order_status = 'delivered'` |
 | **Average Delivery Time** | **12.09 days** | Average transit time from purchase timestamp to customer delivery |
-| **Late Delivery Rate** | **6.8%** | Orders delivered past the promised estimated date [ check whether it is calculated over delivered orders only] |
+| **Late Delivery Rate** | **6.8%** | Orders delivered past the promised estimated date  |
 | **Average Review Score** | **4.09 / 5.0** | Overall mean customer satisfaction score across 99K+ reviews |
 
 ---

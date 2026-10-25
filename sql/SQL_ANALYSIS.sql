@@ -160,16 +160,20 @@ WHERE tc.constraint_type = 'FOREIGN KEY';
 -- ============================================================================
 
 -- Q1: Total Revenue
+-- NOTE: Revenue is not filtered by order_status (includes all orders in the orders table).
+-- See README KPI table for clarification on order status coverage [VERIFY].
 
 SELECT ROUND(SUM(ORDER_VALUE),2)AS total_revenue
-FROM ORDERS
+FROM ORDERS;
 
 -- Q2: Total Orders
 
 SELECT COUNT(*) AS total_orders
-FROM ORDERS
+FROM ORDERS;
 
 -- Q3: Average Order Value
+-- NOTE: Revenue is not filtered by order_status (calculated across all orders in the orders table).
+-- See README KPI table for clarification on order status coverage [VERIFY].
 
 SELECT ROUND(AVG(order_value), 2) AS average_order_value
 FROM orders;
@@ -194,7 +198,7 @@ SELECT ORDER_YEAR,ORDER_MONTH_NAME,
 ROUND(SUM(ORDER_VALUE),2) AS MONTHLY_REVENUE
 FROM ORDERS
 GROUP BY ORDER_YEAR,ORDER_MONTH,ORDER_MONTH_NAME
-ORDER BY ORDER_YEAR,ORDER_MONTH 
+ORDER BY ORDER_YEAR,ORDER_MONTH;
 
 
 -- Q6: State-Wise Revenue Distribution (Geographic Analysis)
@@ -205,9 +209,11 @@ FROM ORDERS O
 JOIN CUSTOMERS C
 ON C.CUSTOMER_ID=O.CUSTOMER_ID
 GROUP BY C.CUSTOMER_STATE
-ORDER BY REVENUE DESC
+ORDER BY REVENUE DESC;
 
 -- Q7: Revenue by Product Category (Merchandising Strategy)
+-- WARNING: Joining order_items with orders and summing order_value (SUM(o.order_value)) can double-count multi-item orders.
+-- The dashboard's category chart uses SUM(price) from order_items instead.
 
 SELECT P.PRODUCT_CATEGORY_NAME_ENGLISH,
 ROUND(SUM(O.ORDER_VALUE),2) AS REVENUE
@@ -217,9 +223,11 @@ ON O.ORDER_ID=OT.ORDER_ID
 JOIN PRODUCTS P
 ON OT.PRODUCT_ID=P.PRODUCT_ID
 GROUP BY P.PRODUCT_CATEGORY_NAME_ENGLISH
-ORDER BY REVENUE DESC
+ORDER BY REVENUE DESC;
 
 -- Q8: Top Revenue-Generating Sellers (Marketplace Performance)
+-- WARNING: Joining order_items with orders and summing order_value (SUM(o.order_value)) can double-count multi-item orders.
+-- The dashboard's category chart uses SUM(price) from order_items instead.
 
 SELECT S.SELLER_ID,
 ROUND(SUM(O.ORDER_VALUE),2) AS REVENUE
@@ -229,7 +237,7 @@ ON O.ORDER_ID=OT.ORDER_ID
 JOIN SELLERS S
 ON OT.SELLER_ID=S.SELLER_ID
 GROUP BY S.SELLER_ID
-ORDER BY REVENUE DESC
+ORDER BY REVENUE DESC;
 
 -- Q9: Payment Method Usage (Financial Behavior Analysis)
 
@@ -239,7 +247,7 @@ FROM ORDERS O
 JOIN PAYMENTS PY
 ON O.ORDER_ID=PY.ORDER_ID
 GROUP BY PY.PAYMENT_TYPE
-ORDER BY TOTAL DESC
+ORDER BY TOTAL DESC;
 
 -- Q10: Delivery Performance vs Customer Satisfaction (Operational Quality)
 
@@ -352,6 +360,7 @@ GROUP BY c.customer_state
 ORDER BY avg_rating DESC;
 
 -- Q20: Percentage of Late Deliveries (SLA Compliance)
+-- NOTE: The denominator COUNT(*) includes undelivered orders.
 
 SELECT
 ROUND(
@@ -482,6 +491,7 @@ LIMIT 100;
 
 
 -- Q27: Customer Cohort Analysis (Monthly Acquisition & Retention)
+-- NOTE: This query returns active customers per cohort month, not retention percentages.
 WITH customer_cohorts AS (
     SELECT
         c.customer_unique_id,
